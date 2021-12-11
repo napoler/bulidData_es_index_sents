@@ -26,33 +26,39 @@ for path in DATAPATH:
     # datajson=tkitJson.Json(path)
     with open(path) as f:
         for i, it in enumerate(tqdm(f)):
-            one = json.loads(it)
-            # print(one)
-            sent = one["question"]
-            # print(sent)
-            # writer.writerow([sent])
-            # out = get(one["question"])
-            # outjson.save([{"q": one["question"], "out":out['data']}])
-            tmpData.append(sent)
+            if i < 8875:
+                continue
+            try:
+                one = json.loads(it)
+                # print(one)
+                items=[]
+                sent = one["question"]
+                # print(sent)
+                # writer.writerow([sent])
+                # out = get(one["question"])
+                # outjson.save([{"q": one["question"], "out":out['data']}])
+                tmpData.append(sent)
 
-            for sents in one['answers']:
-                sentsList = cut(sents)
-                # print(sentsList)
-                # tmpData.extend(sentsList)
-                tmpData = tmpData+sentsList
-            for sent in tmpData:
-                item={"id":sent,"content":sent,"content_type":"zhidao"}
-                es.add(item)
+                for sents in one['answers']:
+                    sentsList = cut(sents)
+                    # print(sentsList)
+                    # tmpData.extend(sentsList)
+                    tmpData = tmpData+sentsList
+                for sent in tmpData:
+                    if len(sent) > 5:
+                        item = {"id": sent, "content": sent,
+                                "content_type": "zhidao"}
+                        items.append(item)
+                    pass
+
+                tmpData = []
+                es.addMulti(items)
+            except Exception as e:
+                print(e)
                 pass
-
-            tmpData=[]
-
-            if i>1000:
+            if i > 1000:
                 es.save()
                 # break
-
-
-
 
             # if i % 1000 == 0 and i != 0:
             #     for sent in tmpData:
