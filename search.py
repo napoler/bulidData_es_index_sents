@@ -22,14 +22,14 @@ from tkitElasticsearch import tkitElasticsearch
 
 
 """
-es = tkitElasticsearch(host='127.0.0.1:9200', index="chinese_sents")
+es = tkitElasticsearch(host='127.0.0.1:9200', index="chinese_sents_next")
 
 keyword = "百度知道"
 while keyword != "exit":
     keyword = input("keyword:")
     for i, it in enumerate(es.find(keyword, limit=10)):
         # print(dir(it))
-        print(i, it.content)
+        print(i, it.content,it.next)
 
 
 def print_hi(name):

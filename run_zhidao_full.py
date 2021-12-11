@@ -17,22 +17,23 @@ from pprint import pprint
 
 """
 es = tkitElasticsearch(host='127.0.0.1:9200', index="chinese_sents_next")
+
 MAX_LENGTH = 128
 
 DATAPATH = ["/mnt/data/dev/tdata/知道/zhidao_qa.json"]
-
+items = []
 for path in DATAPATH:
     # datajson=tkitJson.Json(path)
     with open(path) as f:
         for i, it in enumerate(tqdm(f)):
-            # if i < 8875:
+            # if i < 4500:
             #     continue
+            pairs = []
+            tmpData = []
             try:
                 one = json.loads(it)
                 # print(one)
-                items=[]
-                pairs=[]
-                tmpData = []
+
                 sent = one["question"]
 
                 # print(sent)
@@ -64,8 +65,9 @@ for path in DATAPATH:
                     items.append(item)
                     pass
 
-
-                es.addMulti(items)
+                if i % 100 == 0 and i != 0:
+                    es.addMulti(items)
+                    items = []
             except Exception as e:
                 print(e)
                 pass
