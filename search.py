@@ -23,9 +23,15 @@ from tkitElasticsearch import tkitElasticsearch
 
 """
 es = tkitElasticsearch(host='127.0.0.1:9200', index="chinese_sents")
-MAX_LENGTH = 128
-for it in es.find("中国"):
-    print(it)
+
+keyword = "百度知道"
+while keyword != "exit":
+    keyword = input("keyword:")
+    for i, it in enumerate(es.find(keyword, limit=10)):
+        # print(dir(it))
+        print(i, it.content)
+
+
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
